@@ -104,15 +104,19 @@ public class Main {
 
             lexer = new MiniLangLexer(input);
 
-            CommonTokenStream tokens =
-                new CommonTokenStream(lexer);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-            MiniLangParser parser =
-                new MiniLangParser(tokens);
+            MiniLangParser parser = new MiniLangParser(tokens);
 
-            parser.prog();
+            MiniLangParser.ProgContext arvore = parser.prog();
 
             if (parser.getNumberOfSyntaxErrors() == 0) {
+
+                Semantico semantico = new Semantico();
+
+                semantico.visit(arvore);
+
+                System.out.println("Analise semantica concluida");
 
                 System.out.println(
                     "Programa reconhecido com sucesso"
