@@ -1,0 +1,19 @@
+PROGRAM teste;
+
+VaR
+    x : INTEGER;
+    y : INTEGER;
+
+BEGIN
+
+x := 20 - -10;
+y := 20;
+
+IF (x < y AND y > 0) THEN {
+    WRITE("test1");
+    WHILE (TRUE) DO {
+        WRITE ("teste2")
+    }
+}
+
+END.
