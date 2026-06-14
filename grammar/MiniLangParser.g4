@@ -30,8 +30,8 @@ elemW: expr | CADEIA;
 
 cmdAtrib: ID ATRIB expr;
 
-expr: exprRel | expr OPLOG exprRel;
-exprRel: exprAd | exprAd OPREL exprAd;
-exprAd: exprMult | exprAd OPAD exprMult;
-exprMult: fator | exprMult OPMULT fator;
+expr: exprRel (OPLOG exprRel)*;
+exprRel: exprAd (OPREL exprAd)?;
+exprAd: exprMult (OPAD exprMult)*;
+exprMult: fator (OPMULT fator)*;
 fator: ID | CTE | TRUE | FALSE | ABPAR expr FPAR | OPNEG fator;
