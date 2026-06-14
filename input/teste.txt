@@ -2,9 +2,10 @@ PROGRAM teste;
 
 VAR
     x : INTEGER;
+    y : BOOLEAN;
 
 BEGIN
 
-x := y + 10
+x := TRUE
 
 END.
