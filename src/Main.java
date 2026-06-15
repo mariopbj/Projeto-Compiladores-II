@@ -1,3 +1,4 @@
+import java.util.List;
 import org.antlr.v4.runtime.*;
 
 public class Main {
@@ -125,6 +126,35 @@ public class Main {
                 System.out.println("\n=== CODIGO 3AC ===");
 
                 for (String linha : gerador.getCodigo()) {
+
+                    System.out.println(linha);
+                }
+
+                Otimizador otimizador = new Otimizador();
+
+                List<String> codigoFold = otimizador.constantFolding(gerador.getCodigo());
+
+                System.out.println("\n=== CONSTANT FOLDING ===");
+
+                for (String linha : codigoFold) {
+
+                    System.out.println(linha);
+                }
+
+                List<String> codigoProp = otimizador.constantPropagation(codigoFold);
+
+                List<String> codigoFinal = otimizador.constantFolding(codigoProp);
+
+                System.out.println("\n=== CONSTANT PROPAGATION ===");
+
+                for (String linha : codigoProp) {
+
+                    System.out.println(linha);
+                }
+
+                System.out.println("\n=== CONSTANT FOLDING ===");
+
+                for (String linha : codigoFinal) {
 
                     System.out.println(linha);
                 }

@@ -7,11 +7,6 @@ VAR
 BEGIN
 
 x := 10;
-y := 20;
-
-IF (x < y AND y > 0) THEN {
-
-    WRITE("OK")
-}
+y := x + 5
 
 END.
