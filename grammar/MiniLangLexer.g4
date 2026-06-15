@@ -76,7 +76,7 @@ CTE : [+-]?[0-9]+ {
         try {
             int valor = Integer.parseInt(getText());
 
-            if (valor > 32767) {
+            if (valor > 32767 || valor < -32768) {
                 throw new RuntimeException(
                     "Erro! Linha " + getLine()
                     + ": Valor inteiro acima do limite máximo de 2 bytes : "
