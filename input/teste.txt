@@ -2,12 +2,11 @@ PROGRAM teste;
 
 VAR
     x : INTEGER;
+    y : INTEGER;
+    z : INTEGER;
 
 BEGIN
 
-IF (0 == 0) THEN {
-
-    x := 10
-}
+z := x + y
 
 END.

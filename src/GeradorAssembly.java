@@ -1,0 +1,226 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+public class GeradorAssembly {
+
+    private List<String> codigoAsm = new ArrayList<>();
+
+    private Set<String> variaveis = new HashSet<>();
+
+    private void coletarVariaveis(List<String> codigo3AC) {
+
+        for (String linha : codigo3AC) {
+
+            String[] partes = linha.split(" ");
+
+            if (partes.length >= 3 && partes[1].equals("=")) {
+
+                variaveis.add(partes[0]);
+            }
+        }
+    }
+
+    public List<String> getCodigoAsm() {
+        return codigoAsm;
+    }
+
+    public void gerar(List<String> codigo3AC) {
+
+        coletarVariaveis(codigo3AC);
+
+        codigoAsm.add(".data");
+
+        for (String var : variaveis) {
+
+            codigoAsm.add(var + " dw 0");
+        }
+
+        codigoAsm.add("");
+
+        codigoAsm.add(".text");
+
+        codigoAsm.add("start:");
+
+        for (String linha : codigo3AC) {
+
+            traduzir(linha);
+        }
+    }
+
+    private void traduzir(String linha) {
+        if (linha.endsWith(":")) {
+
+            codigoAsm.add(linha);
+
+            return;
+        }
+
+        if (linha.startsWith("GOTO ")) {
+
+            String label = linha.substring(5);
+
+            codigoAsm.add("jmp " + label);
+
+            return;
+        }
+
+        String[] partes = linha.split(" ");
+
+        if (partes.length == 5 && partes[3].equals("+")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("add ax, word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (partes.length == 5 &&
+            partes[3].equals("-")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("sub ax, word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (partes.length == 5 && partes[3].equals("*")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("imul word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (partes.length == 5 && partes[3].equals("/")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("cwd");
+
+            codigoAsm.add("idiv word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (partes.length == 3 && partes[1].equals("=")) {
+
+            String destino = partes[0];
+
+            String origem = partes[2];
+
+            if (origem.matches("-?\\d+")) {
+
+                codigoAsm.add("mov word ptr [" + destino + "], " + origem);
+
+            } else {
+
+                codigoAsm.add("mov ax, word ptr [" + origem + "]");
+
+                codigoAsm.add("mov word ptr [" + destino + "], ax");
+            }
+
+            return;
+        }
+
+        if (partes.length == 5 && partes[3].equals("+")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("add ax, word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (partes.length == 5 && partes[3].equals("-")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String op2 = partes[4];
+
+            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+            codigoAsm.add("sub ax, word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov word ptr [" + destino + "], ax");
+
+            return;
+        }
+
+        if (linha.startsWith("IF ")) {
+
+            String[] p = linha.split(" ");
+
+            String variavel = p[1];
+
+            String label = p[5];
+
+            codigoAsm.add("mov ax, word ptr [" + variavel + "]");
+
+            codigoAsm.add("cmp ax, 0");
+
+            codigoAsm.add("je " + label);
+
+            return;
+        }
+
+        if (linha.startsWith("WRITE ")) {
+
+            String valor = linha.substring(6);
+
+            codigoAsm.add("push word ptr [" + valor + "]");
+
+            codigoAsm.add("call _print_integer");
+
+            return;
+        }
+
+    }
+
+}

@@ -170,6 +170,17 @@ public class Main {
                     System.out.println(linha);
                 }
 
+                GeradorAssembly asm = new GeradorAssembly();
+
+                asm.gerar(codigoDead);
+
+                System.out.println("\n=== ASSEMBLY ===");
+
+                for (String linha : asm.getCodigoAsm()) {
+
+                    System.out.println(linha);
+                }
+
                 System.out.println(
                     "Programa reconhecido com sucesso"
                 );
