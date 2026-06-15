@@ -145,6 +145,8 @@ public class Main {
 
                 List<String> codigoFinal = otimizador.constantFolding(codigoProp);
 
+                List<String> codigoStrength = otimizador.strengthReduction(codigoFinal);
+
                 System.out.println("\n=== CONSTANT PROPAGATION ===");
 
                 for (String linha : codigoProp) {
@@ -152,9 +154,9 @@ public class Main {
                     System.out.println(linha);
                 }
 
-                System.out.println("\n=== CONSTANT FOLDING ===");
+                System.out.println("\n=== STRENGTH REDUCTION ===");
 
-                for (String linha : codigoFinal) {
+                for (String linha : codigoStrength) {
 
                     System.out.println(linha);
                 }

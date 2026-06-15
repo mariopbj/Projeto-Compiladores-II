@@ -6,7 +6,6 @@ VAR
 
 BEGIN
 
-x := 10;
-y := x + 5
+y := x * 4
 
 END.

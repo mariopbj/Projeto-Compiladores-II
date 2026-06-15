@@ -57,14 +57,11 @@ public class Otimizador {
         return resultado;
     }
 
-    public List<String> constantPropagation(
-            List<String> codigo) {
+    public List<String> constantPropagation(List<String> codigo) {
 
-        Map<String, String> constantes =
-            new HashMap<>();
+        Map<String, String> constantes = new HashMap<>();
 
-        List<String> resultado =
-            new ArrayList<>();
+        List<String> resultado = new ArrayList<>();
 
         for (String linha : codigo) {
 
@@ -72,40 +69,68 @@ public class Otimizador {
 
             for (String variavel : constantes.keySet()) {
 
-                novaLinha =
-                    novaLinha.replaceAll(
-                        "\\b" + variavel + "\\b",
-                        constantes.get(variavel)
-                    );
+                novaLinha = novaLinha.replaceAll("\\b" + variavel + "\\b", constantes.get(variavel));
             }
 
             resultado.add(novaLinha);
 
-            String[] partes =
-                novaLinha.split(" ");
+            String[] partes = novaLinha.split(" ");
 
             if (partes.length == 3) {
 
-                String destino =
-                    partes[0];
+                String destino = partes[0];
 
-                String valor =
-                    partes[2];
+                String valor = partes[2];
 
                 if (valor.matches("-?\\d+")) {
 
-                    constantes.put(
-                        destino,
-                        valor
-                    );
+                    constantes.put(destino, valor);
 
                 } else {
 
-                    constantes.remove(
-                        destino
-                    );
+                    constantes.remove(destino);
                 }
             }
+        }
+
+        return resultado;
+    }
+
+    public List<String> strengthReduction(List<String> codigo) {
+
+        List<String> resultado = new ArrayList<>();
+
+        for (String linha : codigo) {
+
+            String[] partes = linha.split(" ");
+
+            if (partes.length == 5 && partes[3].equals("*")) {
+
+                String destino = partes[0];
+
+                String op1 = partes[2];
+
+                String op2 = partes[4];
+
+                try {
+
+                    int valor = Integer.parseInt(op2);
+
+                    if (valor > 0 && (valor & (valor - 1)) == 0) {
+
+                        int shift = Integer.numberOfTrailingZeros(valor);
+
+                        resultado.add(destino + " = " + op1 + " << " + shift);
+
+                        continue;
+                    }
+
+                } catch (NumberFormatException e) {
+
+                }
+            }
+
+            resultado.add(linha);
         }
 
         return resultado;
