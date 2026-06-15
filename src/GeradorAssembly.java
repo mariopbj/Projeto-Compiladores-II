@@ -9,6 +9,13 @@ public class GeradorAssembly {
 
     private Set<String> variaveis = new HashSet<>();
 
+    private int contadorComparacao = 0;
+
+    private String novoLabelCmp() {
+
+        return "CMP_" + contadorComparacao++;
+    }
+
     private void coletarVariaveis(List<String> codigo3AC) {
 
         for (String linha : codigo3AC) {
@@ -67,6 +74,180 @@ public class GeradorAssembly {
         }
 
         String[] partes = linha.split(" ");
+
+if (partes.length == 5 && partes[3].equals(">")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("jg " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
+
+if (partes.length == 5 && partes[3].equals("<")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("jl " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
+
+if (partes.length == 5 && partes[3].equals(">=")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("jge " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
+
+if (partes.length == 5 && partes[3].equals("<=")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("jle " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
+
+if (partes.length == 5 && partes[3].equals("==")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("je " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
+
+if (partes.length == 5 && partes[3].equals("<>")) {
+
+    String destino = partes[0];
+
+    String op1 = partes[2];
+
+    String op2 = partes[4];
+
+    String label = novoLabelCmp();
+
+    codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+
+    codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+    codigoAsm.add("jne " + label + "_TRUE");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 0");
+
+    codigoAsm.add("jmp " + label + "_END");
+
+    codigoAsm.add(label + "_TRUE:");
+
+    codigoAsm.add("mov word ptr [" + destino + "], 1");
+
+    codigoAsm.add(label + "_END:");
+
+    return;
+}
 
         if (partes.length == 5 && partes[3].equals("+")) {
 

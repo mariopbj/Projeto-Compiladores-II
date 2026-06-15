@@ -3,10 +3,12 @@ PROGRAM teste;
 VAR
     x : INTEGER;
     y : INTEGER;
-    z : INTEGER;
 
 BEGIN
 
-z := x + y
+IF (x > y) THEN {
+
+    x := 10
+}
 
 END.
