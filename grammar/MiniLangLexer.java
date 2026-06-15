@@ -145,6 +145,9 @@ public class MiniLangLexer extends Lexer {
 		case 0:
 
 			          if (getText().length() > 16) {
+
+			            System.out.println("Aviso: identificador " + getText() + " truncado para " + getText().substring(0,16));
+
 			            setText(getText().substring(0, 16));
 			          }
 			      
@@ -158,7 +161,7 @@ public class MiniLangLexer extends Lexer {
 			        try {
 			            int valor = Integer.parseInt(getText());
 
-			            if (valor > 32767) {
+			            if (valor > 32767 || valor < -32768) {
 			                throw new RuntimeException(
 			                    "Erro! Linha " + getLine()
 			                    + ": Valor inteiro acima do limite máximo de 2 bytes : "

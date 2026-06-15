@@ -68,6 +68,9 @@ CADEIA : '"' (~["\r\n])* '"';
 
 ID : [a-zA-Z][a-zA-Z0-9]* {
           if (getText().length() > 16) {
+
+            System.out.println("Aviso: identificador " + getText() + " truncado para " + getText().substring(0,16));
+
             setText(getText().substring(0, 16));
           }
       };

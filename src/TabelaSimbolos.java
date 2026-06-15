@@ -3,22 +3,22 @@ import java.util.Map;
 
 public class TabelaSimbolos {
 
-    private Map<String, String> tabela =
-        new HashMap<>();
+    private Map<String, Simbolo> tabela = new HashMap<>();
 
-    public void adicionar(String nome,
-                           String tipo) {
+    private int proximoDeslocamento = 0;
+
+    public void adicionar(String nome, String tipo) {
 
         if (tabela.containsKey(nome)) {
 
-            throw new RuntimeException(
-                "Erro Semantico: Variavel "
-                + nome
-                + " ja declarada"
-            );
+            throw new RuntimeException("Erro Semantico: Variavel " + nome + " ja declarada");
         }
 
-        tabela.put(nome, tipo);
+        Simbolo simbolo = new Simbolo(nome, tipo, proximoDeslocamento);
+
+        tabela.put(nome, simbolo);
+
+        proximoDeslocamento += 2;
     }
 
     public boolean existe(String nome) {
@@ -28,6 +28,12 @@ public class TabelaSimbolos {
 
     public String buscar(String nome) {
 
-        return tabela.get(nome);
+        return tabela.get(nome).getTipo();
+    }
+
+    public int deslocamento(String nome) {
+
+        return tabela.get(nome)
+                     .getDeslocamento();
     }
 }
