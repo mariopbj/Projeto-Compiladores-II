@@ -73,12 +73,27 @@ public class Semantico
             return tabela.buscar(ctx.ID().getText());
         }
 
+        if (ctx.expr() != null) {
+
+            return descobrirTipo(ctx.expr());
+        }
+
         return null;
     }
 
     private String descobrirTipo(MiniLangParser.ExprContext ctx) {
 
         if (!ctx.OPLOG().isEmpty()) {
+
+            for (int i = 0; i < ctx.exprRel().size(); i++) {
+
+                String tipo = descobrirTipoExprRel(ctx.exprRel(i));
+
+                if (!tipo.equals("BOOLEAN")) {
+
+                    throw new RuntimeException("Erro Semantico: operador logico exige operandos BOOLEAN");
+                }
+            }
 
             return "BOOLEAN";
         }
@@ -90,6 +105,15 @@ public class Semantico
 
         if (ctx.OPREL() != null) {
 
+            String tipo1 = descobrirTipoExprAd(ctx.exprAd(0));
+
+            String tipo2 = descobrirTipoExprAd(ctx.exprAd(1));
+
+            if (!tipo1.equals(tipo2)) {
+
+                throw new RuntimeException("Erro Semantico: comparacao entre tipos diferentes");
+            }
+
             return "BOOLEAN";
         }
 
@@ -100,6 +124,16 @@ public class Semantico
 
         if (!ctx.OPAD().isEmpty()) {
 
+            for (int i = 0; i < ctx.exprMult().size(); i++) {
+
+                String tipo = descobrirTipoExprMult(ctx.exprMult(i));
+
+                if (!tipo.equals("INTEGER")) {
+
+                    throw new RuntimeException("Erro Semantico: operador + ou - exige operandos INTEGER");
+                }
+            }
+
             return "INTEGER";
         }
 
@@ -109,6 +143,16 @@ public class Semantico
     private String descobrirTipoExprMult(MiniLangParser.ExprMultContext ctx) {
 
         if (!ctx.OPMULT().isEmpty()) {
+
+            for (int i = 0; i < ctx.fator().size(); i++) {
+
+                String tipo = tipoFator(ctx.fator(i));
+
+                if (!tipo.equals("INTEGER")) {
+
+                    throw new RuntimeException("Erro Semantico: operador * ou / exige operandos INTEGER");
+                }
+            }
 
             return "INTEGER";
         }

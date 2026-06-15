@@ -2,10 +2,13 @@ PROGRAM teste;
 
 VAR
     x : INTEGER;
-    y : BOOLEAN;
+    y : INTEGER;
+    b : BOOLEAN;
 
 BEGIN
 
-x := TRUE
+x := 10 + 20;
+b := x < y;
+b := TRUE AND FALSE
 
 END.
