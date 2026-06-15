@@ -2,10 +2,12 @@ PROGRAM teste;
 
 VAR
     x : INTEGER;
-    y : INTEGER;
 
 BEGIN
 
-y := x * 4
+IF (0 == 0) THEN {
+
+    x := 10
+}
 
 END.

@@ -147,6 +147,8 @@ public class Main {
 
                 List<String> codigoStrength = otimizador.strengthReduction(codigoFinal);
 
+                List<String> codigoDead = otimizador.deadCodeElimination(codigoStrength);
+
                 System.out.println("\n=== CONSTANT PROPAGATION ===");
 
                 for (String linha : codigoProp) {
@@ -157,6 +159,13 @@ public class Main {
                 System.out.println("\n=== STRENGTH REDUCTION ===");
 
                 for (String linha : codigoStrength) {
+
+                    System.out.println(linha);
+                }
+
+                System.out.println("\n=== DEAD CODE ELIMINATION ===");
+
+                for (String linha : codigoDead) {
 
                     System.out.println(linha);
                 }

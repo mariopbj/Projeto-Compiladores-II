@@ -11,9 +11,13 @@ public class Otimizador {
 
         for (String linha : codigo) {
 
-            String regex = "(\\w+) = (-?\\d+) ([+\\-*/]) (-?\\d+)";
+            String regexArit =
+                "(\\w+) = (-?\\d+) ([+\\-*/]) (-?\\d+)";
 
-            if (linha.matches(regex)) {
+            String regexRel =
+                "(\\w+) = (-?\\d+) (==|<>|<|<=|>|>=) (-?\\d+)";
+
+            if (linha.matches(regexArit)) {
 
                 String[] partes = linha.split(" ");
 
@@ -48,6 +52,50 @@ public class Otimizador {
 
                 resultado.add(destino + " = " + valor);
 
+            } else if (linha.matches(regexRel)) {
+
+                String[] partes = linha.split(" ");
+
+                String destino = partes[0];
+
+                int op1 = Integer.parseInt(partes[2]);
+
+                String operador = partes[3];
+
+                int op2 = Integer.parseInt(partes[4]);
+
+                boolean valor = false;
+
+                switch (operador) {
+
+                    case "==":
+                        valor = op1 == op2;
+                        break;
+
+                    case "<>":
+                        valor = op1 != op2;
+                        break;
+
+                    case "<":
+                        valor = op1 < op2;
+                        break;
+
+                    case "<=":
+                        valor = op1 <= op2;
+                        break;
+
+                    case ">":
+                        valor = op1 > op2;
+                        break;
+
+                    case ">=":
+                        valor = op1 >= op2;
+                        break;
+                }
+
+                resultado.add(
+                    destino + " = " + (valor ? 1 : 0)
+                );
             } else {
 
                 resultado.add(linha);
@@ -128,6 +176,48 @@ public class Otimizador {
                 } catch (NumberFormatException e) {
 
                 }
+            }
+
+            resultado.add(linha);
+        }
+
+        return resultado;
+    }
+
+    public List<String> deadCodeElimination(List<String> codigo) {
+
+        List<String> resultado = new ArrayList<>();
+
+        boolean ignorar = false;
+
+        String labelDestino = null;
+
+        for (String linha : codigo) {
+
+            if (linha.matches("IF 1 == 0 GOTO .*")) {
+
+                continue;
+            }
+
+            if (linha.matches("IF 0 == 0 GOTO .*")) {
+
+                labelDestino = linha.substring(linha.indexOf("GOTO") + 5);
+
+                ignorar = true;
+
+                continue;
+            }
+
+            if (ignorar) {
+
+                if (linha.equals(labelDestino + ":")) {
+
+                    ignorar = false;
+
+                    resultado.add(linha);
+                }
+
+                continue;
             }
 
             resultado.add(linha);
