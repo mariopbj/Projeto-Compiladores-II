@@ -1,14 +1,16 @@
 PROGRAM teste;
 
 VAR
-    x : INTEGER;
-    y : INTEGER;
-    b : BOOLEAN;
+    x : BOOLEAN;
+    y : BOOLEAN;
 
 BEGIN
 
-x := 10 + 20;
-b := x < y;
-b := TRUE AND FALSE
+x := TRUE;
+y := FALSE;
+
+IF (x > y) THEN {
+    WRITE("ERRO")
+}
 
 END.
