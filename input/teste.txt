@@ -2,9 +2,16 @@ PROGRAM teste;
 
 VAR
     x : INTEGER;
+    y : INTEGER;
 
 BEGIN
 
-x := 2 + 3 * 4
+x := 10;
+y := 20;
+
+IF (x < y AND y > 0) THEN {
+
+    WRITE("OK")
+}
 
 END.
