@@ -118,6 +118,17 @@ public class Main {
 
                 System.out.println("Analise semantica concluida");
 
+                Gerador3AC gerador = new Gerador3AC();
+
+                gerador.visit(arvore);
+
+                System.out.println("\n=== CODIGO 3AC ===");
+
+                for (String linha : gerador.getCodigo()) {
+
+                    System.out.println(linha);
+                }
+
                 System.out.println(
                     "Programa reconhecido com sucesso"
                 );

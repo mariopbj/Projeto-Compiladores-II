@@ -1,16 +1,10 @@
 PROGRAM teste;
 
 VAR
-    x : BOOLEAN;
-    y : BOOLEAN;
+    x : INTEGER;
 
 BEGIN
 
-x := TRUE;
-y := FALSE;
-
-IF (x > y) THEN {
-    WRITE("ERRO")
-}
+x := 2 + 3 * 4
 
 END.
