@@ -185,6 +185,12 @@ public class Main {
                     "Programa reconhecido com sucesso"
                 );
 
+                System.out.println("\n=== EXECUCAO (INTERPRETADOR) ===");
+
+                Interpretador interpretador = new Interpretador(codigoDead);
+
+                interpretador.executar();
+
             } else {
 
                 System.out.println(
