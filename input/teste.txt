@@ -1,12 +1,27 @@
 PROGRAM teste;
 
 VAR
-    x : BOOLEAN;
+    x : INTEGER;
+    y : INTEGER;
+    z : INTEGER;
 
 BEGIN
 
-IF (~FALSE) THEN {
-    WRITE("ola")
+READ(x);
+READ(y);
+
+z := x + y;
+
+IF ((z > 10) OR ~(x == y)) THEN {
+
+    WRITE(z)
+
+};
+
+WHILE (z > 0) DO {
+
+    z := z - 1
+
 }
 
 END.

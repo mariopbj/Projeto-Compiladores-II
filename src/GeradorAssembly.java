@@ -11,6 +11,13 @@ public class GeradorAssembly {
 
     private int contadorComparacao = 0;
 
+    private TabelaSimbolos tabela;
+
+    public GeradorAssembly(List<String> codigo, TabelaSimbolos tabela) {
+
+        this.tabela = tabela;
+    }
+
     private String novoLabelCmp() {
 
         return "CMP_" + contadorComparacao++;
@@ -41,7 +48,22 @@ public class GeradorAssembly {
 
         for (String var : variaveis) {
 
-            codigoAsm.add(var + " dw 0");
+            if (!tabela.existe(var)) {
+
+                codigoAsm.add(var + " dw 0");
+            }
+        }
+
+        for (Simbolo s : tabela.getTabela().values()) {
+
+            if (s.getTipo().equals("INTEGER")) {
+
+                codigoAsm.add(s.getNome() + " dw 0");
+
+            } else if (s.getTipo().equals("BOOLEAN")) {
+
+                codigoAsm.add(s.getNome() + " db 0");
+            }
         }
 
         codigoAsm.add("");

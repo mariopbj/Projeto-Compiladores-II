@@ -3,6 +3,10 @@ public class Semantico
 
     private TabelaSimbolos tabela = new TabelaSimbolos();
 
+    public TabelaSimbolos getTabela() {
+
+        return tabela;
+    }
 
     @Override
     public Void visitDeclTip(

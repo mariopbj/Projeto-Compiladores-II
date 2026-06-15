@@ -170,7 +170,7 @@ public class Main {
                     System.out.println(linha);
                 }
 
-                GeradorAssembly asm = new GeradorAssembly();
+                GeradorAssembly asm = new GeradorAssembly(codigoDead, semantico.getTabela());
 
                 asm.gerar(codigoDead);
 

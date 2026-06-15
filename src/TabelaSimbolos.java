@@ -5,6 +5,11 @@ public class TabelaSimbolos {
 
     private Map<String, Simbolo> tabela = new HashMap<>();
 
+    public Map<String, Simbolo> getTabela() {
+
+        return tabela;
+    }
+
     private int proximoDeslocamento = 0;
 
     public void adicionar(String nome, String tipo) {
