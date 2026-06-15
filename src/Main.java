@@ -83,18 +83,11 @@ public class Main {
 
                 if (atributo != null) {
 
-                    System.out.println(
-                        "LEXEMA: " + token.getText()
-                        + " | TIPO: " + tipo
-                        + " | ATRIBUTO: " + atributo
-                    );
+                    //System.out.println("LEXEMA: " + token.getText() + " | TIPO: " + tipo + " | ATRIBUTO: " + atributo);
 
                 } else {
 
-                    System.out.println(
-                        "LEXEMA: " + token.getText()
-                        + " | TIPO: " + tipo
-                    );
+                    //System.out.println("LEXEMA: " + token.getText() + " | TIPO: " + tipo);
                 }
             }
             
@@ -117,7 +110,7 @@ public class Main {
 
                 semantico.visit(arvore);
 
-                System.out.println("Analise semantica concluida");
+                //System.out.println("Analise semantica concluida");
 
                 Gerador3AC gerador = new Gerador3AC();
 

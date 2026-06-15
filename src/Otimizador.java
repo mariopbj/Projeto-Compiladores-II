@@ -108,37 +108,49 @@ public class Otimizador {
     public List<String> constantPropagation(List<String> codigo) {
 
         Map<String, String> constantes = new HashMap<>();
-
         List<String> resultado = new ArrayList<>();
 
         for (String linha : codigo) {
 
+            if ((linha.endsWith(":") && !linha.contains(" ")) || linha.startsWith("GOTO ")) {
+                constantes.clear();
+            }
+
             String novaLinha = linha;
 
-            for (String variavel : constantes.keySet()) {
+            String[] tokens = linha.split(" ");
 
-                novaLinha = novaLinha.replaceAll("\\b" + variavel + "\\b", constantes.get(variavel));
+            if (tokens.length >= 3 && tokens[1].equals("=")) {
+
+                String esquerda = tokens[0];
+
+                int idx = linha.indexOf(" = ");
+                String direita = linha.substring(idx + 3).trim();
+
+                for (String var : constantes.keySet()) {
+                    direita = direita.replaceAll("\\b" + var + "\\b", constantes.get(var));
+                }
+
+                novaLinha = esquerda + " = " + direita;
+
+                if (direita.matches("-?\\d+")) {
+                    constantes.put(esquerda, direita);
+                } else {
+                    constantes.remove(esquerda);
+                }
+
+            } else {
+
+                String temp = linha;
+
+                for (String var : constantes.keySet()) {
+                    temp = temp.replaceAll("\\b" + var + "\\b", constantes.get(var));
+                }
+
+                novaLinha = temp;
             }
 
             resultado.add(novaLinha);
-
-            String[] partes = novaLinha.split(" ");
-
-            if (partes.length == 3) {
-
-                String destino = partes[0];
-
-                String valor = partes[2];
-
-                if (valor.matches("-?\\d+")) {
-
-                    constantes.put(destino, valor);
-
-                } else {
-
-                    constantes.remove(destino);
-                }
-            }
         }
 
         return resultado;
