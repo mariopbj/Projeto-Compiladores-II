@@ -1,14 +1,12 @@
 PROGRAM teste;
 
 VAR
-    x : INTEGER;
-    y : INTEGER;
+    x : BOOLEAN;
 
 BEGIN
 
-IF (x > y) THEN {
-
-    x := 10
+IF (~FALSE) THEN {
+    WRITE("ola")
 }
 
 END.
