@@ -23,6 +23,21 @@ public class GeradorAssembly {
         return "CMP_" + contadorComparacao++;
     }
 
+    private boolean ehNumero(String s) {
+
+        return s.matches("-?\\d+");
+    }
+
+    private String operando(String s) {
+
+        if (ehNumero(s)) {
+
+            return s;
+        }
+
+        return "word ptr [" + s + "]";
+    }
+
     private void coletarVariaveis(List<String> codigo3AC) {
 
         for (String linha : codigo3AC) {
@@ -63,6 +78,10 @@ public class GeradorAssembly {
             } else if (s.getTipo().equals("BOOLEAN")) {
 
                 codigoAsm.add(s.getNome() + " db 0");
+
+            } else if (s.getTipo().equals("STRING")) {
+
+                codigoAsm.add(s.getNome() + " db 256 dup(?)");
             }
         }
 
@@ -107,9 +126,9 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("jg " + label + "_TRUE");
 
@@ -136,9 +155,11 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+
+            codigoAsm.add("mov ax, " + operando(op1));
+
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("jl " + label + "_TRUE");
 
@@ -165,9 +186,9 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("jge " + label + "_TRUE");
 
@@ -194,9 +215,9 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("jle " + label + "_TRUE");
 
@@ -223,9 +244,9 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("je " + label + "_TRUE");
 
@@ -252,9 +273,9 @@ public class GeradorAssembly {
 
             String label = novoLabelCmp();
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("cmp ax, word ptr [" + op2 + "]");
+            codigoAsm.add("cmp ax, " + operando(op2));
 
             codigoAsm.add("jne " + label + "_TRUE");
 
@@ -271,6 +292,29 @@ public class GeradorAssembly {
             return;
         }
 
+        if (partes.length == 5 && partes[3].equals("<<")) {
+
+            String destino = partes[0];
+
+            String op1 = partes[2];
+
+            String shift = partes[4];
+
+            codigoAsm.add(
+                "mov ax, " + operando(op1)
+            );
+
+            codigoAsm.add(
+                "shl ax, " + shift
+            );
+
+            codigoAsm.add(
+                "mov word ptr [" + destino + "], ax"
+            );
+
+            return;
+        }
+
         if (partes.length == 5 && partes[3].equals("+")) {
 
             String destino = partes[0];
@@ -279,9 +323,9 @@ public class GeradorAssembly {
 
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("add ax, word ptr [" + op2 + "]");
+            codigoAsm.add("add ax, " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -296,9 +340,9 @@ public class GeradorAssembly {
 
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("sub ax, word ptr [" + op2 + "]");
+            codigoAsm.add("sub ax, " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -313,9 +357,9 @@ public class GeradorAssembly {
 
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("imul word ptr [" + op2 + "]");
+            codigoAsm.add("imul " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -330,11 +374,11 @@ public class GeradorAssembly {
 
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
             codigoAsm.add("cwd");
 
-            codigoAsm.add("idiv word ptr [" + op2 + "]");
+            codigoAsm.add("idiv " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -347,9 +391,9 @@ public class GeradorAssembly {
             String op1 = partes[2];
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("and ax, word ptr [" + op2 + "]");
+            codigoAsm.add("and ax, " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -362,9 +406,9 @@ public class GeradorAssembly {
             String op1 = partes[2];
             String op2 = partes[4];
 
-            codigoAsm.add("mov ax, word ptr [" + op1 + "]");
+            codigoAsm.add("mov ax, " + operando(op1));
 
-            codigoAsm.add("or ax, word ptr [" + op2 + "]");
+            codigoAsm.add("or ax, " + operando(op2));
 
             codigoAsm.add("mov word ptr [" + destino + "], ax");
 
@@ -376,7 +420,7 @@ public class GeradorAssembly {
             String destino = partes[0];
             String op = partes[3];
 
-            codigoAsm.add("mov ax, word ptr [" + op + "]");
+            codigoAsm.add("mov ax, " + operando(op));
 
             codigoAsm.add("xor ax, 1");
 
@@ -389,11 +433,11 @@ public class GeradorAssembly {
 
             String[] p = linha.split(" ");
 
-            String variavel = p[1];
+            String condicao = p[1];
 
             String label = p[5];
 
-            codigoAsm.add("mov ax, word ptr [" + variavel + "]");
+            codigoAsm.add("mov ax, " + operando(condicao));
 
             codigoAsm.add("cmp ax, 0");
 
@@ -406,9 +450,16 @@ public class GeradorAssembly {
 
             String valor = linha.substring(6);
 
-            codigoAsm.add("push word ptr [" + valor + "]");
+            if (valor.startsWith("\"")) {
 
-            codigoAsm.add("call _print_integer");
+                codigoAsm.add("; WRITE STRING " + valor);
+
+            } else {
+
+                codigoAsm.add("push " + operando(valor));
+
+                codigoAsm.add("call _print_integer");
+            }
 
             return;
         }

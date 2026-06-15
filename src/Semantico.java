@@ -1,7 +1,7 @@
 public class Semantico
     extends MiniLangParserBaseVisitor<Void> {
 
-    private TabelaSimbolos tabela = new TabelaSimbolos();
+    private TabelaSimbolos tabela = new TabelaSimbolos(null);
 
     public TabelaSimbolos getTabela() {
 
@@ -36,6 +36,22 @@ public class Semantico
         }
 
         return visitChildren(ctx);
+    }
+
+    @Override
+    public Void visitCmdComp(MiniLangParser.CmdCompContext ctx) {
+        tabela = tabela.entrarEscopo();
+        visitChildren(ctx);
+        tabela = tabela.sairEscopo();
+        return null;
+    }
+
+    @Override
+    public Void visitBloco(MiniLangParser.BlocoContext ctx) {
+        tabela = tabela.entrarEscopo();
+        visitChildren(ctx);
+        tabela = tabela.sairEscopo();
+        return null;
     }
 
     @Override
@@ -227,6 +243,16 @@ public class Semantico
             }
         }
 
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Void visitCmdWrite(MiniLangParser.CmdWriteContext ctx) {
+        for (var elem : ctx.listW().elemW()) {
+            if (elem.expr() != null) {
+                descobrirTipo(elem.expr());
+            }
+        }
         return visitChildren(ctx);
     }
 

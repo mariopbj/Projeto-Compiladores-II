@@ -30,12 +30,15 @@ sudo apt install antlr4
 
 5. Entre na pasta do projeto:
 ```bash
-cd Projeto-Compiladores-I
+cd Projeto-Compiladores-II
 ```
 
 6. Gerando os arquivos do ANTLR
 ```bash
 antlr4 grammar/MiniLangLexer.g4 grammar/MiniLangParser.g4
+```
+```bash
+antlr4 -visitor grammar/MiniLangLexer.g4 grammar/MiniLangParser.g4
 ```
 
 7. Compile o Java
